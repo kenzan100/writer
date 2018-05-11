@@ -1,0 +1,49 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: "Writer"
+basePath: "/v1"
+tags:
+- name: "chunk"
+- name: "article"
+schemes:
+- "http"
+paths:
+  /chunk:
+    post:
+      tags:
+      - "chunk"
+      summary: "Add a new chunk to an article"
+      description: ""
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Chunk object"
+        required: true
+        schema:
+          $ref: "#/definitions/Chunk"
+      responses:
+        200:
+          description: "success"
+definitions:
+  Chunk:
+    type: "object"
+    required:
+    - "body"
+    properties:
+      article_id:
+        type: "integer"
+        format: "int64"
+      before_chunk_id:
+        type: "integer"
+        format: "int64"
+      body:
+        type: "string"
+        example: "Once upon a time..."
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

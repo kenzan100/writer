@@ -1,5 +1,6 @@
 import Mn from 'backbone.marionette';
 import template from 'html-loader!./layout.html';
+import store from './store';
 
 const Layout = Mn.LayoutView.extend({
   el: '#app-hook',
@@ -12,8 +13,9 @@ const Layout = Mn.LayoutView.extend({
     'click [data-bind="save"]': 'save'
   },
 
-  save: () => {
-    console.log('fuga');
+  save: function(a) {
+    const txt = this.$el.children('textarea').text();
+    store.addChunk(txt);
   }
 });
 

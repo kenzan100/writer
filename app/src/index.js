@@ -1,9 +1,20 @@
 import Mn from 'backbone.marionette';
-// import template from './layout.html';
+import template from 'html-loader!./layout.html';
 
 const Layout = Mn.LayoutView.extend({
   el: '#app-hook',
-  template: '<p>a</p>'
+
+  template: template,
+
+  initialize: () => {},
+
+  events: {
+    'click [data-bind="save"]': 'save'
+  },
+
+  save: () => {
+    console.log('fuga');
+  }
 });
 
 const view = new Layout();

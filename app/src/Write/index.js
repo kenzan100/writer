@@ -1,10 +1,13 @@
 import { reaction, toJS } from 'mobx';
 import Reaction from 'reaction';
 
-import writeTemplate from 'html-loader!./tmpl.html';
-
 export default Backbone.Marionette.View.extend({
-  template: writeTemplate,
+  template: `
+    <div>
+      <textarea></textarea>
+      <button data-bind="save">Save</button>
+    </div>
+  `,
 
   behaviors: [Reaction],
 
@@ -14,6 +17,10 @@ export default Backbone.Marionette.View.extend({
 
   initialize(store) {
     this.store = store;
+  },
+
+  onRender() {
+    this.$el.find('textarea').blur().focus();
   },
 
   save: function(a) {

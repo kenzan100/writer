@@ -1,23 +1,34 @@
 import Mn from 'backbone.marionette';
+import { template as templateFn } from 'underscore';
 import template from 'html-loader!./layout.html';
+import WriteView from './Write';
+import ListView from './List';
 import store from './store';
 
-const Layout = Mn.LayoutView.extend({
-  el: '#app-hook',
+Backbone.Marionette.View.setRenderer(function(tmpl, data) {
+  return templateFn(tmpl)(data);
+});
 
-  template: template,
+const App = Backbone.Marionette.Application.extend({
+  region: '#app-hook',
 
-  initialize: () => {},
-
-  events: {
-    'click [data-bind="save"]': 'save'
-  },
-
-  save: function(a) {
-    const txt = this.$el.children('textarea').text();
-    store.addChunk(txt);
+  onStart() {
+    this.showView(new RootView());
   }
 });
 
-const view = new Layout();
-view.render();
+const RootView = Backbone.Marionette.View.extend({
+  template: template,
+
+  regions: {
+    writeChunk: '#write-chunk',
+    readChunks: '#list-chunks'
+  },
+
+  onRender() {
+    this.showChildView('writeChunk', new WriteView(store));
+    this.showChildView('readChunks', new ListView(store));
+  }
+});
+
+new App().start();

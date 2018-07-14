@@ -5,7 +5,7 @@ const store = observable({
   chunks: [],
   addChunk(text) {
     const index = this.chunks.length;
-    this.chunks.splice(index, 0, text);
+    this.chunks.splice(index, 0, { name: text });
     api.updateArticle(this.chunks.toJSON()).then(
       action("onSuccess", chunks => {
         console.log(chunks);
@@ -18,5 +18,9 @@ const store = observable({
 }, {
   addChunk: action
 });
+
+// import { wiretap, inspect } from "mobx-wiretap";
+// wiretap("Todo app");
+// inspect("Todos Array", store);
 
 export default store;

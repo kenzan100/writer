@@ -34,6 +34,7 @@ const RootView = Backbone.Marionette.View.extend({
   },
 
   initialize() {
+    store.setInitialChunks();
     this.addReactions([
       reaction(
         () => toJS(store.uiState),

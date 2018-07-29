@@ -4,10 +4,24 @@ import api from './api';
 const store = observable({
   uiState: {
     isWriteShown: true,
-    isListShown: false,
+    isListShown: true,
     whereToAdd: null
   },
   chunks: [],
+  setInitialChunks() {
+    api.getChunks()
+      .then(
+        action("onSuccess", res => {
+          res.data.forEach((chunkRaw) => {
+            const chunk = {
+              name: chunkRaw.body,
+              position: parseInt(chunkRaw.position)
+            };
+            this.chunks.push(chunk);
+          });
+        })
+      );
+  },
   addChunk(text) {
     let index;
     if (this.uiState.whereToAdd !== null) {
@@ -20,14 +34,17 @@ const store = observable({
     this.uiState.isWriteShown = false;
     this.uiState.isListShown = true;
     this.uiState.whereToAdd = null;
-    api.updateArticle(this.chunks.toJSON()).then(
-      action("onSuccess", chunks => {
-        console.log(chunks);
-      }),
-      action("onError", error => {
-        console.error(error);
-      })
-    );
+    api.updateArticle(this.chunks.toJSON())
+      .then(
+        action("onSuccess", chunks => {
+          console.log(chunks);
+        })
+      )
+      .catch(
+        action("onError", error => {
+          console.error(error);
+        })
+      );
   },
   addHere(position) {
     this.uiState.whereToAdd = position;
@@ -35,13 +52,14 @@ const store = observable({
     this.uiState.isListShown = false;
   }
 }, {
+  setInitialChunks: action,
   addChunk: action,
   addHere: action
 });
 
-import { wiretap, inspect } from "mobx-wiretap";
-wiretap("Todo app");
-inspect("Todos Array", store);
+// import { wiretap, inspect } from "mobx-wiretap";
+// wiretap("Todo app");
+// inspect("Todos Array", store);
 
 window.store = store;
 
